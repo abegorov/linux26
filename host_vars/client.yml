@@ -1,0 +1,12 @@
+---
+ip: 192.168.11.150
+
+generate_root_ssh_key_file: passwords/{{ inventory_hostname }}.pub
+
+borg_create_server: '{{ hostvars["backup"].ip }}'
+borg_create_schedule: '*-*-* *:00/5:00'
+
+borg_config_repo: ssh://borg@{{ borg_create_server }}{{
+  hostvars["backup"].borg_repo_path }}
+borg_config_create_archive: '::{hostname}-{utcnow}'
+borg_config_create_path: /etc

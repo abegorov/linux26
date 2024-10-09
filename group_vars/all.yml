@@ -1,0 +1,4 @@
+---
+  borg_repo_password: '{{ lookup("ansible.builtin.password",
+    "passwords/backup_repo.txt") }}'
+  borg_config_passphrase: '{{ borg_repo_password }}'

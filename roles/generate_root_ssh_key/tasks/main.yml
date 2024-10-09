@@ -1,0 +1,16 @@
+---
+- name: Generate root ssh key
+  ansible.builtin.user:
+    name: root
+    generate_ssh_key: true
+    ssh_key_type: ed25519
+  register: generate_root_ssh_key_result
+
+- name: Save root public ssh key
+  delegate_to: localhost
+  become: false
+  ansible.builtin.copy:
+    content: '{{ generate_root_ssh_key_result.ssh_public_key }}'
+    dest: '{{ generate_root_ssh_key_file }}'
+    mode: '0600'
+  when: generate_root_ssh_key_file is defined

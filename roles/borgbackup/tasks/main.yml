@@ -1,0 +1,5 @@
+---
+- name: Install borgbackup
+  ansible.builtin.dnf:
+    name: borgbackup
+    state: present

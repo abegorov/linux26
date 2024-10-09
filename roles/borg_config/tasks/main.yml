@@ -1,0 +1,9 @@
+---
+- name: Update borg config
+  ansible.builtin.template:
+    src: borg
+    dest: /etc/sysconfig/borg
+    owner: root
+    group: root
+    mode: '0600'
+  no_log: true

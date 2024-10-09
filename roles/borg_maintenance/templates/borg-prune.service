@@ -1,0 +1,21 @@
+[Unit]
+Description=Borg Backup Prune
+
+[Service]
+Before=borg-compact.service
+Before=borg-check.service
+
+Type=oneshot
+
+User=borg
+Group=borg
+
+EnvironmentFile=/etc/sysconfig/borg
+
+ExecStart=/usr/bin/borg --verbose --show-rc prune \
+  $BORG_PRUNE_ARGS \
+  --list \
+  --stats
+
+StandardOutput=append:/var/log/borg/prune.log
+StandardError=append:/var/log/borg/prune.log

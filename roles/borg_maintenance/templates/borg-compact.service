@@ -1,0 +1,18 @@
+[Unit]
+Description=Borg Backup Compact
+
+[Service]
+After=borg-prune.service
+Before=borg-check.service
+
+Type=oneshot
+
+User=borg
+Group=borg
+
+EnvironmentFile=/etc/sysconfig/borg
+
+ExecStart=/usr/bin/borg compact --verbose --show-rc
+
+StandardOutput=append:/var/log/borg/compact.log
+StandardError=append:/var/log/borg/compact.log

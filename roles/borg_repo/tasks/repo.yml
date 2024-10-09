@@ -1,0 +1,18 @@
+---
+- name: Update backup repo permissions
+  ansible.builtin.file:
+    path: '{{ borg_repo_path }}'
+    state: directory
+    owner: borg
+    group: borg
+    mode: '0750'
+
+- name: Init repository
+  become: true
+  become_user: borg
+  ansible.builtin.command:
+    cmd: /usr/bin/borg init --encryption repokey-blake2
+      '{{ borg_repo_path }}'
+    creates: '{{ borg_repo_path }}/config'
+  environment:
+    BORG_PASSPHRASE: '{{ borg_repo_password }}'

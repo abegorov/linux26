@@ -1,0 +1,18 @@
+BORG_REPO={{ borg_config_repo }}
+BORG_PASSPHRASE={{ borg_config_passphrase }}
+BORG_HOST_ID={{ inventory_hostname }}
+BORG_RSH=/usr/bin/ssh \
+  -oBatchMode=yes \
+  -oServerAliveInterval=10 \
+  -oServerAliveCountMax=30
+
+{% if borg_config_create_archive is defined %}
+BORG_CREATE_ARCHIVE={{ borg_config_create_archive }}
+{% endif %}
+{% if borg_config_create_path is defined %}
+BORG_CREATE_PATH={{ borg_config_create_path }}
+{% endif %}
+
+{% if borg_config_prune_args is defined %}
+BORG_PRUNE_ARGS={{ borg_config_prune_args }}
+{% endif %}

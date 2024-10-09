@@ -1,0 +1,19 @@
+---
+- name: Get repository key
+  become: true
+  become_user: borg
+  ansible.builtin.command:
+    cmd: /usr/bin/borg key export --qr-html '{{ borg_repo_path }}'
+  changed_when: false
+  environment:
+    BORG_PASSPHRASE: '{{ borg_repo_password }}'
+  register: borg_repo_get_key_result
+
+- name: Save repository key
+  delegate_to: localhost
+  become: false
+  ansible.builtin.copy:
+    content: '{{ borg_repo_get_key_result.stdout }}'
+    dest: '{{ borg_repo_key_file }}'
+    mode: '0600'
+  diff: false

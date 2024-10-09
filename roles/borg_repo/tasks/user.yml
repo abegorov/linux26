@@ -1,0 +1,19 @@
+---
+- name: Create borg group
+  ansible.builtin.group:
+    name: borg
+    system: true
+    state: present
+
+- name: Create borg user
+  ansible.builtin.user:
+    name: borg
+    group: borg
+    system: true
+    home: /var/lib/borg
+    create_home: true
+    skeleton: /dev/null
+    password: '*'
+    update_password: always
+    shell: /bin/sh
+    state: present

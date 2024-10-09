@@ -1,0 +1,7 @@
+---
+- name: Restart borg-create timer
+  ansible.builtin.systemd_service:
+    name: borg-create.timer
+    daemon_reload: true
+    state: restarted
+  ignore_errors: '{{ ansible_check_mode }}'

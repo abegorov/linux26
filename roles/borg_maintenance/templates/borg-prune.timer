@@ -1,0 +1,8 @@
+[Unit]
+Description=Borg Backup Prune Timer
+
+[Timer]
+OnCalendar={{ borg_prune_schedule }}
+
+[Install]
+WantedBy=timers.target

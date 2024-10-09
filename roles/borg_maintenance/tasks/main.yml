@@ -1,0 +1,45 @@
+---
+- name: Create logs directory
+  ansible.builtin.file:
+    path: /var/log/borg
+    state: directory
+    owner: borg
+    group: borg
+    mode: '0750'
+
+- name: Update borg maintenance services
+  ansible.builtin.template:
+    src: '{{ item }}.service'
+    dest: /etc/systemd/system/{{ item }}.service
+    owner: root
+    group: root
+    mode: '0644'
+  loop:
+    - borg-prune
+    - borg-compact
+    - borg-check
+
+- name: Update borg maintenance timers
+  ansible.builtin.template:
+    src: '{{ item }}.timer'
+    dest: /etc/systemd/system/{{ item }}.timer
+    owner: root
+    group: root
+    mode: '0644'
+  loop:
+    - borg-prune
+    - borg-compact
+    - borg-check
+  notify: Restart {{ item }} timer
+
+- name: Enable and start borg maintenance timers
+  ansible.builtin.systemd_service:
+    name: '{{ item }}.timer'
+    enabled: true
+    daemon_reload: true
+    state: started
+  loop:
+    - borg-prune
+    - borg-compact
+    - borg-check
+  ignore_errors: '{{ ansible_check_mode }}'

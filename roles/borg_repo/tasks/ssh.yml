@@ -1,0 +1,21 @@
+---
+- name: Update backup repo authorized keys
+  ansible.posix.authorized_key:
+    user: borg
+    key: |
+      {% for key in borg_repo_ssh_keys %}
+      {{ key }}
+      {% endfor %}
+    key_options: command="/usr/bin/borg serve --append-only
+      --restrict-to-repository '{{ borg_repo_path }}'",restrict
+    exclusive: true
+
+
+- name: Configure sshd for borg
+  ansible.builtin.template:
+    src: ssh.conf
+    dest: /etc/ssh/sshd_config.d/borg.conf
+    owner: root
+    group: root
+    mode: '0600'
+  notify: Reload borg sshd config

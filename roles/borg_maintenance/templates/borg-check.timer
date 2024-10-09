@@ -1,0 +1,8 @@
+[Unit]
+Description=Borg Backup Check Timer
+
+[Timer]
+OnCalendar={{ borg_check_schedule }}
+
+[Install]
+WantedBy=timers.target

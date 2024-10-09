@@ -1,0 +1,16 @@
+---
+ip: 192.168.11.160
+
+borg_repo_dev: /dev/sdb
+borg_repo_path: /var/backup
+borg_repo_ssh_keys:
+  - '{{ lookup("ansible.builtin.file",
+          hostvars["client"].generate_root_ssh_key_file) }}'
+borg_repo_key_file: passwords/backup.html
+
+borg_config_repo: '{{ borg_repo_path }}'
+borg_config_prune_args: --keep-daily 90 --keep-monthly 12 --keep-yearly 1
+
+borg_prune_schedule: '*-*-* 12:00:00'
+borg_compact_schedule: '*-*-* 12:00:00'
+borg_check_schedule: '*-*-* 12:00:00'

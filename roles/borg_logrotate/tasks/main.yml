@@ -1,0 +1,8 @@
+---
+- name: Configure logrotate for borg
+  ansible.builtin.template:
+    src: borg
+    dest: /etc/logrotate.d/borg
+    owner: root
+    group: root
+    mode: '0644'

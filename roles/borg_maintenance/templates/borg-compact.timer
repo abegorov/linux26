@@ -1,0 +1,8 @@
+[Unit]
+Description=Borg Backup Compact Timer
+
+[Timer]
+OnCalendar={{ borg_compact_schedule }}
+
+[Install]
+WantedBy=timers.target

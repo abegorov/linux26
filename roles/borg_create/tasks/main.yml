@@ -1,0 +1,43 @@
+---
+- name: Create logs directory
+  ansible.builtin.file:
+    path: /var/log/borg
+    state: directory
+    mode: '0750'
+
+- name: Scan backup for ssh host key
+  ansible.builtin.command:
+    cmd: /usr/bin/ssh-keyscan '{{ borg_create_server }}'
+  changed_when: false
+  register: borg_create_ssh_keyscan_result
+
+- name: Update backup server known_hosts records
+  ansible.builtin.known_hosts:
+    name: '{{ borg_create_server }}'
+    key: '{{ borg_create_ssh_keyscan_result.stdout }}'
+    state: present
+
+- name: Update borg-create service
+  ansible.builtin.template:
+    src: borg-create.service
+    dest: /etc/systemd/system/borg-create.service
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Update borg-create timer
+  ansible.builtin.template:
+    src: borg-create.timer
+    dest: /etc/systemd/system/borg-create.timer
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart borg-create timer
+
+- name: Enable and start borg-create timer
+  ansible.builtin.systemd_service:
+    name: borg-create.timer
+    enabled: true
+    daemon_reload: true
+    state: started
+  ignore_errors: '{{ ansible_check_mode }}'

@@ -1,0 +1,21 @@
+---
+- name: Restart borg-prune timer
+  ansible.builtin.systemd_service:
+    name: borg-prune.timer
+    daemon_reload: true
+    state: restarted
+  ignore_errors: '{{ ansible_check_mode }}'
+
+- name: Restart borg-compact timer
+  ansible.builtin.systemd_service:
+    name: borg-compact.timer
+    daemon_reload: true
+    state: restarted
+  ignore_errors: '{{ ansible_check_mode }}'
+
+- name: Restart borg-check timer
+  ansible.builtin.systemd_service:
+    name: borg-check.timer
+    daemon_reload: true
+    state: restarted
+  ignore_errors: '{{ ansible_check_mode }}'

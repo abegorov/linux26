@@ -1,0 +1,15 @@
+---
+- name: Import mount tasks
+  ansible.builtin.import_tasks: mount.yml
+
+- name: Import user tasks
+  ansible.builtin.import_tasks: user.yml
+
+- name: Import ssh tasks
+  ansible.builtin.import_tasks: ssh.yml
+
+- name: Import repo tasks
+  ansible.builtin.import_tasks: repo.yml
+
+- name: Import key tasks
+  ansible.builtin.import_tasks: key.yml

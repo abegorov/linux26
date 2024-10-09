@@ -1,0 +1,26 @@
+---
+- name: Common provision
+  hosts: all
+  become: true
+  gather_facts: false
+  roles:
+    - generate_root_ssh_key
+    - epel_release
+    - borgbackup
+    - borg_config
+    - borg_logrotate
+
+- name: Backup provision
+  hosts: backup
+  become: true
+  gather_facts: false
+  roles:
+    - borg_repo
+    - borg_maintenance
+
+- name: Client provision
+  hosts: client
+  become: true
+  gather_facts: false
+  roles:
+    - borg_create

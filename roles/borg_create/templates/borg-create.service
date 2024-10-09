@@ -1,0 +1,21 @@
+[Unit]
+Description=Borg Backup
+
+[Service]
+Type=oneshot
+
+EnvironmentFile=/etc/sysconfig/borg
+
+ExecStart=/usr/bin/borg create \
+  --verbose \
+  --filter AME \
+  --list \
+  --stats \
+  --show-rc \
+  --compression zstd \
+  --exclude-caches \
+  "${BORG_CREATE_ARCHIVE}" \
+  $BORG_CREATE_PATH
+
+StandardOutput=append:/var/log/borg/create.log
+StandardError=append:/var/log/borg/create.log

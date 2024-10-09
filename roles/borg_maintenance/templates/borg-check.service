@@ -1,0 +1,18 @@
+[Unit]
+Description=Borg Backup Check
+
+[Service]
+After=borg-prune.service
+After=borg-compact.service
+
+Type=oneshot
+
+User=borg
+Group=borg
+
+EnvironmentFile=/etc/sysconfig/borg
+
+ExecStart=/usr/bin/borg check --verbose --show-rc --verify-data
+
+StandardOutput=append:/var/log/borg/check.log
+StandardError=append:/var/log/borg/check.log
